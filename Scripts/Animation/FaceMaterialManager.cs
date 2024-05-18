@@ -52,7 +52,7 @@ namespace Animation
             float yOffset = (ySteps * _cellSize.y) / _textureSize.y;
             float xOffset = (xSteps * _cellSize.x) / _textureSize.x;
 
-            _shaderUpdateCallback(_shaderUpdateKeyword, new Vector2(xOffset, yOffset));
+            _shaderUpdateCallback(_shaderUpdateKeyword, new Vector2(xOffset, -yOffset));
         }
     }
 
