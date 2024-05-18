@@ -1,4 +1,4 @@
-Shader "Custom/EyeShader"
+Shader "Custom/FaceShader"
 {
     Properties
     {
