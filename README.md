@@ -1,7 +1,7 @@
 # Unity 2D Face rig
 Unity implementation of the [advanced 2D Blender rig created by TheSicklyWizard](https://www.youtube.com/watch?v=VZYm4mg1Eyo).
 
-I highly suggest you watch my video at "under constr".
+I highly suggest you to check out my video ["here"](https://www.youtube.com/watch?v=aqJITl4QCGs&t=28s).
 This is a lite implementation of that system in Unity, as I didn't need all the features.
 
 ## My modifications to the original rig
