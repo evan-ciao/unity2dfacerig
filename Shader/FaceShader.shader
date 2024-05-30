@@ -27,6 +27,8 @@ Shader "Custom/FaceShader"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            // Fog support
+            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -47,6 +49,7 @@ Shader "Custom/FaceShader"
                 float2 uv2 : TEXCOORD2;
                 float2 uv3 : TEXCOORD3;
                 float2 uv4 : TEXCOORD4;
+                UNITY_FOG_COORDS(5)
                 float4 vertex : SV_POSITION;
             };
 
@@ -74,6 +77,9 @@ Shader "Custom/FaceShader"
                 o.uv2 = (((v.uv2 - float2(0.5, 0.5)) * (1 / _UVPupilScale)) + float2(0.5, 0.5)) + _UVPupilOffsetL;  // L Pupil
                 o.uv3 = (((v.uv3 - float2(0.5, 0.5)) * (1 / _UVPupilScale)) + float2(0.5, 0.5)) + _UVPupilOffsetR;  // R Pupil
                 o.uv4 = (((v.uv4 - float2(0, 1)) * _UVMouthScale) + float2(0, 1)) + _UVMouthOffset;                 // Mouth texture uvs
+
+                UNITY_TRANSFER_FOG(o,o.vertex); // Pass fog
+
                 return o;
             }
 
@@ -89,7 +95,11 @@ Shader "Custom/FaceShader"
                 fixed4 pupilsColor = (eyeColor * pupilColorL) * (eyeColor * pupilColorR);
 
                 fixed4 finalColorE = lerp(faceColor, pupilsColor, eyeColor.a);
-                fixed4 finalColorM = lerp(finalColorE, mouthColor, mouthColor.a); 
+                fixed4 finalColorM = lerp(finalColorE, mouthColor, mouthColor.a);
+
+                // Apply fog
+                UNITY_APPLY_FOG(i.fogCoord, finalColorM);
+
                 return finalColorM;
             }
             ENDCG
