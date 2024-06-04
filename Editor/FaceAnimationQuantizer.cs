@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace EditorUtility
+namespace MyEditorUtility
 {
     /// <summary>
     /// This utiliy class enables constant interpolation on
