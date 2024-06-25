@@ -59,6 +59,7 @@ namespace Animation
     /// <summary>
     /// Controls the FaceMaterial shader to animate the face properties.
     /// </summary>
+    [ExecuteInEditMode]
     public class FaceMaterialManager : MonoBehaviour
     {
         [Header("References")]
