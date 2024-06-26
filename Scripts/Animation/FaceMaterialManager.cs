@@ -23,7 +23,6 @@ namespace Animation
             else
             {
                 Debug.LogError("The grid size is a float instead of an int!\nCheck that the cell size is correct.");
-                _gridSize = 1;
             }
 
             _uvsScalingFactor = 1.0f / _gridSize;
@@ -49,8 +48,8 @@ namespace Animation
             int ySteps = Mathf.FloorToInt(textureIndex / _gridSize);
             int xSteps = textureIndex % _gridSize;
 
-            float yOffset = (ySteps * _cellSize.y) / _textureSize.y;
             float xOffset = (xSteps * _cellSize.x) / _textureSize.x;
+            float yOffset = (ySteps * _cellSize.y) / _textureSize.y;
 
             _shaderUpdateCallback(_shaderUpdateKeyword, new Vector2(xOffset, -yOffset));
         }
@@ -105,6 +104,16 @@ namespace Animation
         /// </summary>
         private void OnValidate()
         {
+            Initialize();
+        }
+
+        private void Awake()
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             if (_pupilLTexture != null)
                 _faceMaterial.SetTexture(PUPILTEXTUREL, _pupilLTexture);
             if (_pupilRTexture != null)
@@ -140,10 +149,19 @@ namespace Animation
         /// </summary>
         private void LateUpdate()
         {
+            /*
             /// PUPILS
             // Animate pupils by their relative position to the UVPupilBaseBone and offset them
             Vector2 offsetL = (Vector2)(_UVPupilLBone.position - _UVPupilBaseBone.position) * new Vector2(1, -1) + _UVOffset;
             Vector2 offsetR = (Vector2)(_UVPupilRBone.position - _UVPupilBaseBone.position) * new Vector2(1, -1) + _UVOffset * new Vector2(-1, 1);
+            */
+            // FIX
+            // Get the normal of the plane defined by the base bone
+            Vector3 planeNormal = _UVPupilBaseBone.up;
+
+            // Project the positions of the pupil bones onto the plane defined by the base bone
+            Vector2 offsetL = Vector3.ProjectOnPlane(_UVPupilLBone.position - _UVPupilBaseBone.position, planeNormal) * new Vector2(1, -1) + _UVOffset * new Vector2(1, -1);
+            Vector2 offsetR = Vector3.ProjectOnPlane(_UVPupilRBone.position - _UVPupilBaseBone.position, planeNormal) * new Vector2(1, -1) - _UVOffset;
 
             // Update the face shader pupils offsets
             _faceMaterial.SetVector(UVPUPILOFFSETL, offsetL);
